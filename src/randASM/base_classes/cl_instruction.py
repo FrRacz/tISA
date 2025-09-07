@@ -1,6 +1,6 @@
 import random
 
-class cl_instruction_list():
+class cl_instruction_bank():
     def __init__(self,*args):
         self._instr_dict = {}
         # populate the instruction dictornary

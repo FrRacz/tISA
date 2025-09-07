@@ -2,7 +2,7 @@ import random
 import vsc
 
 @vsc.randobj
-class cl_instruction_list():
+class cl_instruction_bank():
     def __init__(self,*args):
         self._instr_dict = {}
         # populate the instruction dictornary
@@ -15,6 +15,7 @@ class cl_instruction_list():
 
 
 
+@vsc.randobj
 class cl_instruction():
     def __init__(self,name):
         self._name = name
@@ -26,5 +27,3 @@ class cl_instruction():
     def get_name(self):
         return self._name
 
-    def randomize(self):
-        pass
