@@ -1,1 +1,4 @@
 .venv/
+z3/
+*__pycache__/
+.hypothesis
