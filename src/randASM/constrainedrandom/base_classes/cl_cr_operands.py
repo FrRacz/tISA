@@ -10,7 +10,7 @@ class cl_memory_location_op():
 
 class cl_immediate(RandObj):
     def __init__(self,size):
-        super().__init__()
+        super().__init__(max_iterations=2**(size*2))
         self._size = size
         self.add_rand_var('_val',domain=range(2**self._size))
 
