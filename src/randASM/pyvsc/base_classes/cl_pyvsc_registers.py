@@ -20,9 +20,7 @@ class cl_register():
 
     @vsc.constraint
     def reg_in_reglist(self):
-        self._reg_num >= 0
-        self._reg_num <= self._reg_bank._size
-        self._reg_num in self._reg_bank._reglist
+        self._reg_num.inside(vsc.rangelist(self._reg_bank._reglist))
 
     def get_asm_str(self):
         return self._reg_bank.get_asm_str(self._reg_num)
