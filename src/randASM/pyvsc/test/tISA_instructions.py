@@ -6,6 +6,7 @@ from randASM.pyvsc.test.tISA_registers import tISA_register_bank
 
 @vsc.randobj
 class instr_add(cl_instruction):
+    instr_type = 'arith'
     def __init__(self):
         super().__init__("add")
         self.rd = vsc.rand_attr(cl_register(reg_bank=tISA_register_bank))
@@ -21,6 +22,7 @@ class instr_add(cl_instruction):
 
 @vsc.randobj
 class instr_addi(cl_instruction):
+    instr_type = 'arith'
     def __init__(self):
         super().__init__("addi")
         self.rd = vsc.rand_attr(cl_register(reg_bank=tISA_register_bank))
@@ -34,6 +36,7 @@ class instr_addi(cl_instruction):
 
 @vsc.randobj
 class instr_slli(cl_instruction):
+    instr_type = 'arith'
     def __init__(self):
         super().__init__("slli")
         self.rd = vsc.rand_attr(cl_register(reg_bank=tISA_register_bank))
@@ -50,6 +53,7 @@ class instr_slli(cl_instruction):
 
 @vsc.randobj
 class instr_srli(cl_instruction):
+    instr_type = 'arith'
     def __init__(self):
         super().__init__("srli")
         self.rd = vsc.rand_attr(cl_register(reg_bank=tISA_register_bank))
@@ -65,6 +69,7 @@ class instr_srli(cl_instruction):
 
 @vsc.randobj
 class instr_lui(cl_instruction):
+    instr_type = 'arith'
     def __init__(self):
         super().__init__("lui")
         self.rd = vsc.rand_attr(cl_register(reg_bank=tISA_register_bank))
@@ -78,6 +83,7 @@ class instr_lui(cl_instruction):
 
 @vsc.randobj
 class instr_li(cl_instruction):
+    instr_type = 'arith'
     def __init__(self):
         super().__init__("li")
         self.rd = vsc.rand_attr(cl_register(reg_bank=tISA_register_bank))

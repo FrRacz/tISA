@@ -1,12 +1,12 @@
 from constrainedrandom import *
-from randASM.constrainedrandom.base_classes.cl_cr_instruction import cl_instruction_bank
-from randASM.constrainedrandom.base_classes.cl_cr_instruction_sequence import cl_instruction_sequence
+from randASM.constrainedrandom.base_classes.cl_instruction import cl_instruction_bank
+from randASM.constrainedrandom.base_classes.cl_instruction_sequence import cl_instruction_sequence
 from randASM.constrainedrandom.test.tISA_instructions import *
+from randASM.constrainedrandom.test.tISA_registers import *
 
 
 if __name__ == "__main__":
-    tISA_instr_bank = cl_instruction_bank()
-    tISA_instr_bank.register_instruction(add=instr_add,
+    tISA_instr_bank = cl_instruction_bank() tISA_instr_bank.register_instruction(add=instr_add,
                                          addi=instr_addi,
                                          slli=instr_slli,
                                          srli=instr_srli,
@@ -20,34 +20,46 @@ if __name__ == "__main__":
     program = cl_instruction_sequence(instr_bank=tISA_instr_bank)
 
     program.randomize()
-    program.get_instructions()
 
     def is_t0(x):
-        return x == 0
+        return x == t0
 
-    def lt_five(x):
-        return x < 2**16*0.05
+    def a_is_b(a,b):
+        return a == b
 
-    def is_even(x):
-        return x%2 == 0
+    def is_t1(x):
+        return x == t1
 
     for instr in program.instruction_list:
-        if instr.get_mnemonic() == "add":
-            instr.add_constraint(rd=(is_t0,('_reg_num',)))
-
-        if instr.get_mnemonic() == "li":
-            instr.add_constraint(
-                    rd=(is_t0,('_reg_num',)),
-                    imm=(lt_five,('_val',))
-            )
+        if instr.get_mnemonic() == 'add':
+            instr.add_constraint(is_t0,('rd'))
+            instr.add_temp_constraints((a_is_b,('rd','rs1')))
 
     program.randomize_instructions()
     print(program.get_asm_str())
 
     for instr in program.instruction_list:
-        if instr.get_mnemonic() == "li":
-            instr.remove_constraint('rd')
-    program.randomize_instructions()
+        if instr.get_mnemonic() == 'add':
+            instr.remove_temp_constraints('rd')
 
+    program.randomize_instructions()
     print('-'*10)
     print(program.get_asm_str())
+
+    # def lt_five(x):
+    #     return x < 2**16*0.05
+    #
+    # def is_even(x):
+    #     return x%2 == 0
+    #
+    #
+    # program.randomize_instructions()
+    # print(program.get_asm_str())
+    #
+    # for instr in program.instruction_list:
+    #     if instr.get_mnemonic() == "li":
+    #         instr.remove_constraint('rd')
+    # program.randomize_instructions()
+    #
+    # print('-'*10)
+    # print(program.get_asm_str())

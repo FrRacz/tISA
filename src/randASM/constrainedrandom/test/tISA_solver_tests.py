@@ -1,6 +1,6 @@
 from constrainedrandom import *
-from randASM.constrainedrandom.base_classes.cl_cr_instruction import cl_instruction_bank
-from randASM.constrainedrandom.base_classes.cl_cr_instruction_sequence import cl_instruction_sequence
+from randASM.constrainedrandom.base_classes.cl_instruction import cl_instruction_bank
+from randASM.constrainedrandom.base_classes.cl_instruction_sequence import cl_instruction_sequence
 from randASM.constrainedrandom.test.tISA_instructions import *
 
 
