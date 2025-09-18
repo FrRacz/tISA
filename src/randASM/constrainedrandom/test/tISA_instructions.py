@@ -9,6 +9,7 @@ imm_4_bit = cl_immediate_bank(size=4)
 imm_16_bit = cl_immediate_bank(size=16)
 
 class instr_add(cl_instruction):
+    instr_type = 'arith'
     def __init__(self):
         super().__init__(
             mnemonic="add",
@@ -18,6 +19,7 @@ class instr_add(cl_instruction):
         )
 
 class instr_addi(cl_instruction):
+    instr_type = 'arith'
     def __init__(self):
         super().__init__(
             mnemonic="addi",
@@ -26,6 +28,7 @@ class instr_addi(cl_instruction):
         )
 
 class instr_slli(cl_instruction):
+    instr_type = 'arith'
     def __init__(self):
         super().__init__(
             mnemonic="slli",
@@ -35,6 +38,7 @@ class instr_slli(cl_instruction):
         )
 
 class instr_srli(cl_instruction):
+    instr_type = 'arith'
     def __init__(self):
         super().__init__(
             mnemonic="srli",
@@ -44,6 +48,7 @@ class instr_srli(cl_instruction):
         )
 
 class instr_lui(cl_instruction):
+    instr_type = 'imm_gen'
     def __init__(self):
         super().__init__(
             mnemonic="lui",
@@ -52,6 +57,7 @@ class instr_lui(cl_instruction):
         )
 
 class instr_li(cl_instruction):
+    instr_type = 'imm_gen'
     def __init__(self):
         super().__init__(
             mnemonic="li",

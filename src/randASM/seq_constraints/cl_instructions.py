@@ -1,7 +1,3 @@
-from randASM.constrainedrandom.base_classes.cl_registers import cl_register
-from randASM.constrainedrandom.base_classes.cl_instruction_sequence import cl_instruction_sequence
-import inspect
-import random
 from constrainedrandom import RandObj
 
 class cl_instruction_bank():
@@ -18,22 +14,25 @@ class cl_instruction_bank():
         for mnemonic, instr_cls in instructions.items():
             self._instr_dict[mnemonic] = instr_cls
 
+class cl_instruction_sequence():
+    def __init__(self):
+        self._instr_stream = []
+        self._asm_stream = []
 
-    def get_instruction(self,mnemonic):
-        """
-        Not in use
-        """
-        instr = self._instr_dict[mnemonic]()
-        return instr
+    def randomize(self):
+        for instr in self._instr_stream:
+            if isinstance(instr,cl_meta_instruction):
+                instr.resolve_required()
 
-    def get_instruction_list(self,instruction_list:list):
-        """
-        Not in use
-        """
-        instructions = []
-        for instr_mn in instruction_list:
-            instructions.append(self.get_instruction(instr_mn))
-        return instructions
+        for instr in self._instr_stream:
+            if isinstance(instr,cl_instruction):
+                instr.randomize()
+                self._asm_stream.append(instr)
+            elif isinstance(instr,cl_meta_instruction):
+                instr_ret = instr.randomize()
+                self._asm_stream.append(instr_ret)
+
+
 
 
 class cl_meta_instruction(RandObj):
@@ -54,34 +53,15 @@ class cl_meta_instruction(RandObj):
 
     def randomize(self):
         super().randomize()
-        return self.instr()
+        return self.instr().randomize()
 
 class cl_instruction(RandObj):
-    """
-    Instruction baseclass, used derive instruction classes.
-
-    Derived from constraindrandoms RandObj
-
-    Attibutes:
-        _mnemonic (str): ASM indentifier of the instruction
-        _temp_constraints (list of constraindrandom constraints):
-            Temporary constraints, applied at randomization with `with_constraints`.
-            New constraints can be added with add_temp_constraints.
-            Constraints for a specific operand can be removed with remove_temp_constraints.
-    """
-
-    def __init__(self,mnemonic:str,**operands):
-        """
-        Args:
-            mnemonic (str): ASM indentifier of the instruction
-            **operands (operand_name: operand_bank): Operands of the instruction
-        """
+    def __init__(self,mnemonic:str,temp_constraints:list,**operands):
         super().__init__()
         self._mnemonic = mnemonic
-        self._temp_constraints = []
+        self._temp_constraint = temp_constraints
         self._op_banks = {}
         self._op_names = []
-        self.label = None
         for op_name, op_bank in operands.items():
             self._op_names.append(op_name)
             self._op_banks[op_name] = op_bank
@@ -97,6 +77,7 @@ class cl_instruction(RandObj):
 
     def get_mnemonic(self):
         return self._mnemonic
+
 
     def remove_temp_constraints(self,*operands):
         """
@@ -128,7 +109,3 @@ class cl_instruction(RandObj):
                 asm += f"{hex(op_cls)}, "
         asm = asm[:-2] + '\n'
         return asm
-
-if __name__ == "__main__":
-    # TODO: Make small directed test
-    pass
