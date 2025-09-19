@@ -1,0 +1,51 @@
+(set-option :produce-unsat-cores true)
+(set-info :status unknown)
+(declare-fun I1 () Int)
+(declare-fun I0 () Int)
+(declare-fun I2 () Int)
+(declare-fun I3 () Int)
+(declare-fun R2 () Int)
+(declare-fun I4 () Int)
+(declare-fun R1 () Int)
+(declare-fun I5 () Int)
+(declare-fun I6 () Int)
+(declare-fun I7 () Int)
+(declare-fun I8 () Int)
+(declare-fun I9 () Int)
+
+;; Sequence order constraints
+(assert (! (< I0 I1) :named seq_order_0))
+(assert (! (< I1 I2) :named seq_order_1))
+(assert (! (< I2 I3) :named seq_order_2))
+(assert (! (< I3 I4) :named seq_order_3))
+(assert (! (< I4 I5) :named seq_order_4))
+(assert (! (< I5 I6) :named seq_order_5))
+(assert (! (< I6 I7) :named seq_order_6))
+(assert (! (< I7 I8) :named seq_order_7))
+(assert (! (< I8 I9) :named seq_order_8))
+
+;; Offset constraints
+(assert (! (>= R2 (+ I3 1)) :named min_offset_R2_I3))
+(assert (! (<= R2 (+ I3 1)) :named max_offset_R2_I3))
+(assert (! (<= R1 (- I4 2)) :named min_offset_R1_I4))
+(assert (! (>= R1 (- I4 2)) :named max_offset_R1_I4))
+
+;; Distinctness constraint
+(assert (! (distinct I0 I1 I2 I3 I4 I5 I6 I7 I8 I9 R2 R1) :named all_distinct))
+
+;; Bounds for all variables
+(assert (! (and (>= I0 0) (< I0 12)) :named bounds_I0))
+(assert (! (and (>= I1 0) (< I1 12)) :named bounds_I1))
+(assert (! (and (>= I2 0) (< I2 12)) :named bounds_I2))
+(assert (! (and (>= I3 0) (< I3 12)) :named bounds_I3))
+(assert (! (and (>= I4 0) (< I4 12)) :named bounds_I4))
+(assert (! (and (>= I5 0) (< I5 12)) :named bounds_I5))
+(assert (! (and (>= I6 0) (< I6 12)) :named bounds_I6))
+(assert (! (and (>= I7 0) (< I7 12)) :named bounds_I7))
+(assert (! (and (>= I8 0) (< I8 12)) :named bounds_I8))
+(assert (! (and (>= I9 0) (< I9 12)) :named bounds_I9))
+(assert (! (and (>= R2 0) (< R2 12)) :named bounds_R2))
+(assert (! (and (>= R1 0) (< R1 12)) :named bounds_R1))
+
+(check-sat)
+(get-unsat-core)
