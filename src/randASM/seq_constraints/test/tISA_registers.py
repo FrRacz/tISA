@@ -1,4 +1,5 @@
-from randASM.constrainedrandom.base_classes.cl_registers import *
+from randASM.seq_constraints.classes.cl_registers import cl_register
+from randASM.seq_constraints.classes.cl_register_pool import cl_register_pool
 
 class t0(cl_register):
     def __init__(self):
@@ -64,7 +65,7 @@ class t15(cl_register):
     def __init__(self):
         super().__init__("t15")
 
-tISA_register_pool = cl_register_bank('base_regs')
+tISA_register_pool = cl_register_pool('base_regs')
 tISA_register_pool.register_register(
         t0=t0,
         t1=t1,

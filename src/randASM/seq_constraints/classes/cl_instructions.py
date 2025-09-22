@@ -1,65 +1,12 @@
 from constrainedrandom import RandObj
-
-class cl_instruction_bank():
-    """
-    Class to hold all instructions of a ISA.
-    """
-    def __init__(self):
-        self._instr_dict = {}
-
-    def register_instruction(self, **instructions):
-        """
-        Add a new instruction to the instruction dictionary
-        """
-        for mnemonic, instr_cls in instructions.items():
-            self._instr_dict[mnemonic] = instr_cls
-
-class cl_instruction_sequence():
-    def __init__(self):
-        self._instr_stream = []
-        self._asm_stream = []
-
-    def randomize(self):
-        for instr in self._instr_stream:
-            if isinstance(instr,cl_meta_instruction):
-                instr.resolve_required()
-
-        for instr in self._instr_stream:
-            if isinstance(instr,cl_instruction):
-                instr.randomize()
-                self._asm_stream.append(instr)
-            elif isinstance(instr,cl_meta_instruction):
-                instr_ret = instr.randomize()
-                self._asm_stream.append(instr_ret)
-
-
-
-
-class cl_meta_instruction(RandObj):
-    def __init__(self,instr_pool,parent_sequence:cl_instruction_sequence):
-        super().__init__()
-        self.add_rand_var('instr',domain=instr_pool)
-        self.parent_sequence = parent_sequence
-        self._required = []
-
-    def add_required_instr(self,instr,location:range):
-        self._required.attach((instr,location))
-
-    def resolve_required(self):
-        for instr, location in self._required:
-            idx = self.parent_sequence.instr_stream.index(self)
-            offset = random.choice(location)
-            self.parent_sequence.instr_stream.insert(idx+offset,instr)
-
-    def randomize(self):
-        super().randomize()
-        return self.instr().randomize()
+from randASM.seq_constraints.classes.cl_registers import cl_register
+import inspect
 
 class cl_instruction(RandObj):
-    def __init__(self,mnemonic:str,temp_constraints:list,**operands):
+    def __init__(self,mnemonic:str,temp_constraints:list=[],**operands):
         super().__init__()
         self._mnemonic = mnemonic
-        self._temp_constraint = temp_constraints
+        self._temp_constraints = temp_constraints
         self._op_banks = {}
         self._op_names = []
         for op_name, op_bank in operands.items():
@@ -90,6 +37,8 @@ class cl_instruction(RandObj):
 
     def randomize(self):
         super().randomize(with_constraints=self._temp_constraints)
+        # Add return call to pass randomized object back
+        return self
 
     def post_randomize(self):
         for op in self._op_names:
